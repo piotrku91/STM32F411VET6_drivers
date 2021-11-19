@@ -33,6 +33,7 @@
 #define GPIOD_BASEADDR 				(AHB1PERIPH_BASE + 0x0C00)
 #define GPIOE_BASEADDR 				(AHB1PERIPH_BASE + 0x1000)
 #define GPIOH_BASEADDR 				(AHB1PERIPH_BASE + 0x1C00)
+#define RCC_BASEADDR 				(AHB1PERIPH_BASE + 0x3800)
 
 /* Base addresses of peripherals are hanging APB1 bus */
 
@@ -53,6 +54,37 @@
 #define USART1_BASEADDR 			(APB2PERIPH_BASE + 0x1000)
 #define USART6_BASEADDR 			(APB2PERIPH_BASE + 0x1400)
 
+/* Clock Enable Macros for GPIOx peripherals */
+
+#define GPIOA_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 0))
+#define GPIOB_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 1))
+#define GPIOC_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 2))
+#define GPIOD_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 3))
+#define GPIOE_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 4))
+#define GPIOH_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 7))
+
+/* Clock Enable Macros for i2C peripherals */
+
+#define I2C1_PCLK_EN() 	(RCC->APB1ENR |= (1 << 21))
+#define I2C2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 22))
+#define I2C3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 23))
+
+/* Clock Enable Macros for SPI peripherals */
+
+#define SPI1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 12))
+#define SPI2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 14))
+#define SPI3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 15))
+#define SPI4_PCLK_EN() 	(RCC->APB2ENR |= (1 << 13))
+#define SPI5_PCLK_EN() 	(RCC->APB2ENR |= (1 << 20))
+
+/* Clock Enable Macros for USART peripherals */
+
+#define USART2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 17))
+#define USART1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 4))
+#define USART6_PCLK_EN() 	(RCC->APB2ENR |= (1 << 7))
+
+
+
 
 /*  ###################### peripherals register definition structures  #####################*/
 
@@ -69,6 +101,40 @@ typedef struct
 	__vo uint32_t AFR[2]; /* GPIO alternate function low register / GPIO alternate function high register  */
 }GPIO_RefDef_t;
 
+typedef struct
+{
+	__vo uint32_t CR;
+	__vo uint32_t PLLCFGR;
+	__vo uint32_t CFGR;
+	__vo uint32_t CCIR;
+	__vo uint32_t AHB1RSTR;
+	__vo uint32_t AHB2RSTR;
+	 uint32_t RESERVED0[2];
+	__vo uint32_t APB1RSTR;
+	__vo uint32_t APB2RSTR;
+	uint32_t RESERVED1[2];
+	__vo uint32_t AHB1ENR;
+	__vo uint32_t AHB2ENR;
+	uint32_t RESERVED2[2];
+	__vo uint32_t APB1ENR;
+	__vo uint32_t APB2ENR;
+	uint32_t RESERVED3[2];
+	__vo uint32_t APB1LPENR;
+	__vo uint32_t APB1LPENR;
+	uint32_t RESERVED4[2];
+	__vo uint32_t AHB1LPENR;
+	__vo uint32_t AHB1LPENR;
+	uint32_t RESERVED5[2];
+	__vo uint32_t BDCR;
+	__vo uint32_t CSR;
+	uint32_t RESERVED6[2];
+	uint32_t RESERVED6[2];
+	__vo uint32_t SSCGR;
+	__vo uint32_t PLLI2SCFGR;
+	__vo uint32_t DCKCFGR;
+
+}RCC_RegDef_t;
+
 /*  ###################### peripherals definitions   #####################*/
 #define GPIOA 						((GPIO_RegDef_t*)GPIOA_BASEADDR)
 #define GPIOB 						((GPIO_RegDef_t*)GPIOB_BASEADDR)
@@ -76,6 +142,8 @@ typedef struct
 #define GPIOD 						((GPIO_RegDef_t*)GPIOD_BASEADDR)
 #define GPIOE						((GPIO_RegDef_t*)GPIOE_BASEADDR)
 #define GPIOH 						((GPIO_RegDef_t*)GPIOH_BASEADDR)
+
+#define RCC 						((RCC_RegDef_t*)RCC_BASEADDR)
 
 
 #endif /* INC_STM32F411XX_H_ */
