@@ -9,7 +9,15 @@
 #define INC_STM32F411XX_H_
 
 #include <stdint.h>
+/* Generally macros */
 #define __vo volatile
+#define ENABLE						1
+#define DISABLE    					0
+#define SET							ENABLE
+#define RESET						DISABLE
+#define GPIO_PIN_SET                SET
+#define GPIO_PIN_RESET				RESET
+
 
 #define FLASH_BASEADDR              0x80000000U /* Flash memory main address */
 #define SRAM1_BASEADDR			    0x20000000U /* SRAM memory main address */
@@ -56,34 +64,67 @@
 
 /* Clock Enable Macros for GPIOx peripherals */
 
-#define GPIOA_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 0))
-#define GPIOB_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 1))
-#define GPIOC_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 2))
-#define GPIOD_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 3))
-#define GPIOE_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 4))
-#define GPIOH_PCLK_EN() 	(RCC->AHB1ENR |= (1 << 7))
+#define GPIOA_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 0))
+#define GPIOB_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 1))
+#define GPIOC_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 2))
+#define GPIOD_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 3))
+#define GPIOE_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 4))
+#define GPIOH_PCLK_EN() 			(RCC->AHB1ENR |= (1 << 7))
 
 /* Clock Enable Macros for i2C peripherals */
 
-#define I2C1_PCLK_EN() 	(RCC->APB1ENR |= (1 << 21))
-#define I2C2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 22))
-#define I2C3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 23))
+#define I2C1_PCLK_EN() 				(RCC->APB1ENR |= (1 << 21))
+#define I2C2_PCLK_EN() 				(RCC->APB1ENR |= (1 << 22))
+#define I2C3_PCLK_EN() 				(RCC->APB1ENR |= (1 << 23))
 
 /* Clock Enable Macros for SPI peripherals */
 
-#define SPI1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 12))
-#define SPI2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 14))
-#define SPI3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 15))
-#define SPI4_PCLK_EN() 	(RCC->APB2ENR |= (1 << 13))
-#define SPI5_PCLK_EN() 	(RCC->APB2ENR |= (1 << 20))
+#define SPI1_PCLK_EN() 				(RCC->APB2ENR |= (1 << 12))
+#define SPI2_PCLK_EN() 				(RCC->APB1ENR |= (1 << 14))
+#define SPI3_PCLK_EN() 				(RCC->APB1ENR |= (1 << 15))
+#define SPI4_PCLK_EN() 				(RCC->APB2ENR |= (1 << 13))
+#define SPI5_PCLK_EN() 				(RCC->APB2ENR |= (1 << 20))
 
 /* Clock Enable Macros for USART peripherals */
 
-#define USART2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 17))
-#define USART1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 4))
-#define USART6_PCLK_EN() 	(RCC->APB2ENR |= (1 << 7))
+#define USART2_PCLK_EN() 			(RCC->APB1ENR |= (1 << 17))
+#define USART1_PCLK_EN() 			(RCC->APB2ENR |= (1 << 4))
+#define USART6_PCLK_EN() 			(RCC->APB2ENR |= (1 << 7))
+
+/* Clock Enable Macros for SYSCFG peripheral */
+
+#define SYSCFG_PCLK_EN() 			(RCC->APB2ENR |= (1 << 14))
+
+/* Clock Disable Macros for SYSCFG peripheral */
+
+#define SYSCFG_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 14))
 
 
+
+
+
+/* Clock Disable Macros for GPIOx peripherals */
+
+#define GPIOA_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 0))
+#define GPIOB_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 1))
+#define GPIOC_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 2))
+#define GPIOD_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 3))
+#define GPIOE_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 4))
+#define GPIOH_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 7))
+
+/* Clock Disable Macros for SPI peripherals */
+
+#define SPI1_PCLK_DI() 				(RCC->APB2ENR &= ~(1 << 12))
+#define SPI2_PCLK_DI() 				(RCC->APB1ENR &= ~(1 << 14))
+#define SPI3_PCLK_DI() 				(RCC->APB1ENR &= ~(1 << 15))
+#define SPI4_PCLK_DI() 				(RCC->APB2ENR &= ~(1 << 13))
+#define SPI5_PCLK_DI() 				(RCC->APB2ENR &= ~(1 << 20))
+
+/* Clock Disable Macros for USART peripherals */
+
+#define USART2_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 17))
+#define USART1_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 4))
+#define USART6_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 7))
 
 
 /*  ###################### peripherals register definition structures  #####################*/
@@ -120,15 +161,15 @@ typedef struct
 	__vo uint32_t APB2ENR;
 	uint32_t RESERVED3[2];
 	__vo uint32_t APB1LPENR;
-	__vo uint32_t APB1LPENR;
+	__vo uint32_t APB2LPENR;
 	uint32_t RESERVED4[2];
 	__vo uint32_t AHB1LPENR;
-	__vo uint32_t AHB1LPENR;
+	__vo uint32_t AHB2LPENR;
 	uint32_t RESERVED5[2];
 	__vo uint32_t BDCR;
 	__vo uint32_t CSR;
 	uint32_t RESERVED6[2];
-	uint32_t RESERVED6[2];
+	uint32_t RESERVED7[2];
 	__vo uint32_t SSCGR;
 	__vo uint32_t PLLI2SCFGR;
 	__vo uint32_t DCKCFGR;
