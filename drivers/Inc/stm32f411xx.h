@@ -140,7 +140,7 @@ typedef struct
 	__vo uint32_t BSRR; /*  GPIO port bit set/reset register */
 	__vo uint32_t LCKR; /* GPIO port configuration lock register  */
 	__vo uint32_t AFR[2]; /* GPIO alternate function low register / GPIO alternate function high register  */
-}GPIO_RefDef_t;
+}GPIO_RegDef_t;
 
 typedef struct
 {
