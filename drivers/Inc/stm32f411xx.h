@@ -9,6 +9,7 @@
 #define INC_STM32F411XX_H_
 
 #include <stdint.h>
+#include <stdio.h>
 /* Generally macros */
 #define __vo volatile
 #define ENABLE						1
@@ -100,9 +101,6 @@
 #define SYSCFG_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 14))
 
 
-
-
-
 /* Clock Disable Macros for GPIOx peripherals */
 
 #define GPIOA_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 0))
@@ -111,6 +109,15 @@
 #define GPIOD_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 3))
 #define GPIOE_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 4))
 #define GPIOH_PCLK_DI() 			(RCC->AHB1ENR &= ~(1 << 7))
+
+/* RESET GPIOx peripherals */
+
+#define GPIOA_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR &= ~(1 << 0));}while(0)
+#define GPIOB_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR &= ~(1 << 1));}while(0)
+#define GPIOC_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR &= ~(1 << 2));}while(0)
+#define GPIOD_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR &= ~(1 << 3));}while(0)
+#define GPIOE_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR &= ~(1 << 4));}while(0)
+#define GPIOH_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7));}while(0)
 
 /* Clock Disable Macros for SPI peripherals */
 
@@ -186,5 +193,6 @@ typedef struct
 
 #define RCC 						((RCC_RegDef_t*)RCC_BASEADDR)
 
+#include "stm32f411xx_gpio_driver.h"
 
 #endif /* INC_STM32F411XX_H_ */
