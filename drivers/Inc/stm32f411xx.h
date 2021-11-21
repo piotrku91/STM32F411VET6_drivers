@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+
 /* Generally macros */
 #define __vo volatile
 #define ENABLE						1
@@ -19,10 +20,40 @@
 #define GPIO_PIN_SET                SET
 #define GPIO_PIN_RESET				RESET
 
+/* Processor Cortex Mx NVIC ISERx & ICERx Registers Addresses */
+#define NVIC_ISER0					((__vo uint32_t*)0xE000E100)
+#define NVIC_ISER1					((__vo uint32_t*)0xE000E104)
+#define NVIC_ISER2					((__vo uint32_t*)0xE000E108)
+#define NVIC_ISER3					((__vo uint32_t*)0xE000E10C)
+#define NVIC_ICER0					((__vo uint32_t*)0xE000E180)
+#define NVIC_ICER1					((__vo uint32_t*)0xE000E184)
+#define NVIC_ICER2					((__vo uint32_t*)0xE000E188)
+#define NVIC_ICER3					((__vo uint32_t*)0xE000E18C)
+
+/* Processor Cortex Mx NVIC priority Register Addresses */
+#define NVIC_PR_BASEADDR				((__vo uint32_t*)0xE000E400)
+
+
+
+
+/*IRQ Numbbers for STM32F411xC/E */
+#define IRQ_NO_EXTI0				6
+#define IRQ_NO_EXTI1				7
+#define IRQ_NO_EXTI2				8
+#define IRQ_NO_EXTI3				9
+#define IRQ_NO_EXTI4				10
+#define IRQ_NO_EXTI9_5				23
+#define IRQ_NO_EXTI15_10			40
+#define IRQ_NO_EXTI16				1
+#define IRQ_NO_EXTI21				2
+#define IRQ_NO_EXTI22				3
+#define IRQ_NO_EXTI17				41
+#define IRQ_NO_EXTI18				42
+
 
 #define FLASH_BASEADDR              0x80000000U /* Flash memory main address */
 #define SRAM1_BASEADDR			    0x20000000U /* SRAM memory main address */
-#define ROM	                        0x1FFF0000  /* ROM memory main address */
+#define ROM	                        0x1FFF0000U  /* ROM memory main address */
 #define SRAM 						SRAM1_BASEADDR
 
 /* APB and AHB Bus peripherals addresses */
@@ -119,6 +150,15 @@
 #define GPIOE_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR &= ~(1 << 4));}while(0)
 #define GPIOH_REG_RESET() 			do{(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7));}while(0)
 
+/* GPIO to code converter */
+#define GPIO_BASEADDR_TO_CODE(x) 	((x == GPIOA)? 0:\
+									(x == GPIOB)? 1:\
+									(x == GPIOC)? 2:\
+									(x == GPIOD)? 3:\
+									(x == GPIOE)? 4:\
+									(x == GPIOH)? 7:0)
+
+
 /* Clock Disable Macros for SPI peripherals */
 
 #define SPI1_PCLK_DI() 				(RCC->APB2ENR &= ~(1 << 12))
@@ -148,6 +188,25 @@ typedef struct
 	__vo uint32_t LCKR; /* GPIO port configuration lock register  */
 	__vo uint32_t AFR[2]; /* GPIO alternate function low register / GPIO alternate function high register  */
 }GPIO_RegDef_t;
+
+typedef struct
+{
+	__vo uint32_t IMR;     /* Interrupt mask register  */
+	__vo uint32_t EMR;	/*  Event mask register */
+	__vo uint32_t RTSR;	/*  Rising trigger selection register  */
+	__vo uint32_t FTSR; 	/* Falling trigger selection register  */
+	__vo uint32_t SWIER; /* Software interrupt event register  */
+	__vo uint32_t PR; /* Pending register  */
+}EXTI_RegDef_t;
+
+
+typedef struct
+{
+	__vo uint32_t MEMRMP;     /* SYSCFG memory remap register  */
+	__vo uint32_t PMC;	/*  SYSCFG peripheral mode configuration register */
+	__vo uint32_t EXTICR[4];	/*  SYSCFG external interrupt configuration register 1  */
+	__vo uint32_t CMPCR; /* Compensation cell control register  */
+}SYSCFG_RegDef_t;
 
 typedef struct
 {
@@ -192,6 +251,9 @@ typedef struct
 #define GPIOH 						((GPIO_RegDef_t*)GPIOH_BASEADDR)
 
 #define RCC 						((RCC_RegDef_t*)RCC_BASEADDR)
+#define EXTI 						((EXTI_RegDef_t*)EXTI_BASEADDR)
+#define SYSCFG						((SYSCFG_RegDef_t*)RCC_BASEADDR)
+
 
 #include "stm32f411xx_gpio_driver.h"
 
