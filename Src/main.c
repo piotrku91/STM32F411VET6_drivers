@@ -17,14 +17,57 @@
  ******************************************************************************
  */
 #include "stm32f411xx.h"
+#include "stm32f411xx_gpio_driver.h"
 #include <stdint.h>
+#include <string.h>
 
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+void delay(void)
+{
+	for(uint32_t i = 0; i < 500000/2; i++);
+};
+
+void EXTI0_IRQHandler(void)
+{
+delay();
+GPIO_IRQHandling(GPIO_PIN_NO_0);
+GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
+}
+
 
 int main(void)
 {
     /* Loop forever */
-	for(;;);
+	GPIO_Handle_t GpioLed, GpioBtn;
+	memset(&GpioLed,0,sizeof(GpioLed));
+	memset(&GpioBtn,0,sizeof(GpioBtn));
+
+
+	GpioLed.pGPIOx = GPIOD;
+	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
+	GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
+	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	GpioLed.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	GPIO_PeriClockControl(GPIOD, ENABLE);
+	GPIO_Init(&GpioLed);
+
+	GpioBtn.pGPIOx = GPIOA;
+	GpioBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_0;
+	GpioBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IT_FT;
+	GpioBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	GpioBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	GPIO_PeriClockControl(GPIOA, ENABLE);
+	GPIO_Init(&GpioBtn);
+
+	GPIO_IRQPriorityConfig(IRQ_NO_EXTI0, 15);
+	GPIO_IRQInterruptConfig(IRQ_NO_EXTI0, ENABLE);
+
+	while (1)
+	{
+		//if (GPIO_ReadFromInputPin(GPIOA, 0)) {
+		//	delay();
+		//	GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
+		//}
+
+	}
 }
